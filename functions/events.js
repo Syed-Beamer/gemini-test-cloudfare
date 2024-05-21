@@ -219,7 +219,10 @@ export async function onRequest(context) {
     let requestSize = buff.byteLength;
     if (requestSize > 1024 * 1024) {
       return new Response(
-        "Request exceeded more than 1MB. The request size is " + requestSize
+        "Request exceeded more than 1MB. The request size is " + requestSize,
+        {
+          status: 400,
+        }
       );
     }
     let text = new TextDecoder().decode(buff);
@@ -244,25 +247,35 @@ export async function onRequest(context) {
           "Invalid JSON: " +
             marketingRoutesSchema
               .validate(json)
-              .errors.map((error) => error.error)
+              .errors.map((error) => error.error),
+          { status: 400 }
         );
       } else if (json.metadata.schema_name === "app_routes") {
         return new Response(
           "Invalid JSON: " +
-            appRoutesSchema.validate(json).errors.map((error) => error.error)
+            appRoutesSchema.validate(json).errors.map((error) => error.error),
+          { status: 400 }
         );
       } else {
-        return new Response("Invalid Body");
+        return new Response("Invalid Body", { status: 400 });
       }
     }
-    await fetch("https://gemini.getbeamer.com/async/event", {
-      method: request.method,
-      headers: {
-        ...request.headers,
-        "X-Testing-Message": "I'm Syed from Beamer, and I am testing",
-      },
-      body: json,
-    });
+
+    try {
+      await fetch("https://gemini.getbeamer.com/async/event", {
+        method: request.method,
+        headers: {
+          ...request.headers,
+          "X-Testing-Message": "I'm Syed from Beamer, and I am testing",
+        },
+        body: json,
+      });
+    } catch (e) {
+      console.log("Gemini Request Failed: " + error.message);
+      return new Response("Unable to Register Event", {
+        status: 500,
+      });
+    }
 
     return new Response(JSON.stringify(json), {
       status: 200,
