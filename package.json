@@ -1,0 +1,16 @@
+{
+  "name": "gemini",
+  "version": "1.0.0",
+  "description": "Geminijs",
+  "main": "gemini.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run build"
+  },
+  "author": "syed ahamed",
+  "license": "ISC",
+  "dependencies": {
+    "@cfworker/json-schema": "^1.12.8",
+    "@cloudflare/wrangler": "^1.21.0"
+  }
+}
