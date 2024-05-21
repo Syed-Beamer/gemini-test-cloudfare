@@ -5,7 +5,7 @@
   "main": "gemini.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run build"
+    "build": "wrangler pages dev functions"
   },
   "author": "syed ahamed",
   "license": "ISC",

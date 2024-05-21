@@ -217,7 +217,7 @@ export async function onRequest(context) {
 
     let buff = await request.arrayBuffer();
     let requestSize = buff.byteLength;
-    if (requestSize > 1000000) {
+    if (requestSize > 1024 * 1024) {
       return new Response(
         "Request exceeded more than 1MB. The request size is " + requestSize
       );
@@ -225,8 +225,7 @@ export async function onRequest(context) {
     let text = new TextDecoder().decode(buff);
     const json = JSON.parse(text);
 
-    const client_IP = request.headers.get("X-Forwarded-For").toString();
-    console.log(client_IP);
+    const client_IP = request.headers.get("CF-Connecting-IP").toString();
     json.identity.ip_address = client_IP;
     json.metadata.triggered_at = new Date().toISOString();
     console.log(json);
