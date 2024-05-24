@@ -3,15 +3,15 @@
 // export dynamically through wrangler, or we can potentially let users directly
 // add them as a sort of "plugin" system.
 
-import ENTRY from "/Users/Syedbeamer/Desktop/cf-gemini-test/.wrangler/tmp/bundle-YewvXP/middleware-insertion-facade.js";
+import ENTRY from "/Users/Syedbeamer/Desktop/cf-gemini-test/.wrangler/tmp/bundle-EsqciS/middleware-insertion-facade.js";
 import { __facade_invoke__, __facade_register__, Dispatcher } from "/usr/local/lib/node_modules/wrangler/templates/middleware/common.ts";
 import type {
 	WithMiddleware,
 	WorkerEntrypointConstructor,
-} from "/Users/Syedbeamer/Desktop/cf-gemini-test/.wrangler/tmp/bundle-YewvXP/middleware-insertion-facade.js";
+} from "/Users/Syedbeamer/Desktop/cf-gemini-test/.wrangler/tmp/bundle-EsqciS/middleware-insertion-facade.js";
 
 // Preserve all the exports from the worker
-export * from "/Users/Syedbeamer/Desktop/cf-gemini-test/.wrangler/tmp/bundle-YewvXP/middleware-insertion-facade.js";
+export * from "/Users/Syedbeamer/Desktop/cf-gemini-test/.wrangler/tmp/bundle-EsqciS/middleware-insertion-facade.js";
 
 class __Facade_ScheduledController__ implements ScheduledController {
 	readonly #noRetry: ScheduledController["noRetry"];

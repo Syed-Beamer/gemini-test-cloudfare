@@ -5,10 +5,10 @@
   "main": "gemini.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "wrangler pages deploy functions",
-    "dev": "wrangler pages dev functions"
+    "build": "npm i && wrangler pages deploy functions",
+    "dev": "npm i && wrangler pages dev functions"
   },
-  "author": "syed ahamed",
+  "author": "Syed Ahamed",
   "license": "ISC",
   "dependencies": {
     "@cfworker/json-schema": "^1.12.8",

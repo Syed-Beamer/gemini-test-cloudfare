@@ -6,6 +6,11 @@ const appRoutesSchema = new Validator({
     metadata: {
       type: "object",
       properties: {
+        uuid: {
+          type: "string",
+          pattern:
+            "^[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}$",
+        },
         schema_name: {
           type: "string",
           minLength: 1,
@@ -31,6 +36,11 @@ const appRoutesSchema = new Validator({
           minLength: 1,
           maxLength: 50,
         },
+        user_agent: {
+          type: "string",
+          minLength: 1,
+          maxLength: 200,
+        },
       },
       required: [
         "schema_name",
@@ -54,19 +64,22 @@ const appRoutesSchema = new Validator({
           maxLength: 255,
         },
         account_id: {
-          type: "string",
-          minLength: 1,
-          maxLength: 50,
+          oneOf: [
+            { type: "string", minLength: 1, maxLength: 50 },
+            { type: "null" },
+          ],
         },
         user_id: {
-          type: "string",
-          minLength: 1,
-          maxLength: 50,
+          oneOf: [
+            { type: "string", minLength: 1, maxLength: 50 },
+            { type: "null" },
+          ],
         },
         impersonator_id: {
-          type: ["string", "null"],
-          minLength: 1,
-          maxLength: 50,
+          oneOf: [
+            { type: "string", minLength: 1, maxLength: 50 },
+            { type: "null" },
+          ],
         },
       },
       required: ["ip_address", "cookie_id"],
@@ -85,13 +98,13 @@ const appRoutesSchema = new Validator({
           maxLength: 255,
         },
         hash_path: {
-          type: ["string", "null"],
+          oneOf: [{ type: "string" }, { type: "null" }],
         },
         search: {
-          type: ["string", "null"],
+          oneOf: [{ type: "string" }, { type: "null" }],
         },
         referrer: {
-          type: ["string", "null"],
+          oneOf: [{ type: "string" }, { type: "null" }],
         },
       },
       required: ["host", "path"],
@@ -106,6 +119,11 @@ const marketingRoutesSchema = new Validator({
     metadata: {
       type: "object",
       properties: {
+        uuid: {
+          type: "string",
+          pattern:
+            "^[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}$",
+        },
         schema_name: {
           type: "string",
           minLength: 1,
@@ -131,6 +149,14 @@ const marketingRoutesSchema = new Validator({
           minLength: 1,
           maxLength: 50,
         },
+        token_claims: {
+          oneOf: [{ type: "object" }, { type: "null" }],
+        },
+        user_agent: {
+          type: "string",
+          minLength: 1,
+          maxLength: 255,
+        },
       },
       required: [
         "schema_name",
@@ -154,19 +180,16 @@ const marketingRoutesSchema = new Validator({
           maxLength: 255,
         },
         account_id: {
-          type: "string",
-          minLength: 1,
-          maxLength: 50,
+          oneOf: [{ type: "string", maxLength: 255 }, { type: "null" }],
         },
         user_id: {
-          type: "string",
-          minLength: 1,
-          maxLength: 50,
+          oneOf: [{ type: "string", maxLength: 255 }, { type: "null" }],
         },
         impersonator_id: {
-          type: "string",
-          minLength: 1,
-          maxLength: 50,
+          oneOf: [{ type: "string", maxLength: 255 }, { type: "null" }],
+        },
+        other_ids: {
+          oneOf: [{ type: "string", maxLength: 255 }, { type: "null" }],
         },
       },
       required: ["ip_address", "cookie_id"],
@@ -185,13 +208,13 @@ const marketingRoutesSchema = new Validator({
           maxLength: 255,
         },
         hash_path: {
-          type: ["string", "null"],
+          oneOf: [{ type: "string", maxLength: 255 }, { type: "null" }],
         },
         search: {
-          type: ["string", "null"],
+          oneOf: [{ type: "string", maxLength: 255 }, { type: "null" }],
         },
         referrer: {
-          type: ["string", "null"],
+          oneOf: [{ type: "string", maxLength: 255 }, { type: "null" }],
         },
       },
       required: ["host", "path"],

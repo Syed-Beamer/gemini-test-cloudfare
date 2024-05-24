@@ -1314,7 +1314,10 @@ async function onRequest(context) {
     let requestSize = buff.byteLength;
     if (requestSize > 1024 * 1024) {
       return new Response(
-        "Request exceeded more than 1MB. The request size is " + requestSize
+        "Request exceeded more than 1MB. The request size is " + requestSize,
+        {
+          status: 400
+        }
       );
     }
     let text = new TextDecoder().decode(buff);
@@ -1333,31 +1336,40 @@ async function onRequest(context) {
     if (!isValid) {
       if (json.metadata.schema_name === "marketing_routes") {
         return new Response(
-          "Invalid JSON: " + marketingRoutesSchema.validate(json).errors.map((error) => error.error)
+          "Invalid JSON: " + marketingRoutesSchema.validate(json).errors.map((error2) => error2.error),
+          { status: 400 }
         );
       } else if (json.metadata.schema_name === "app_routes") {
         return new Response(
-          "Invalid JSON: " + appRoutesSchema.validate(json).errors.map((error) => error.error)
+          "Invalid JSON: " + appRoutesSchema.validate(json).errors.map((error2) => error2.error),
+          { status: 400 }
         );
       } else {
-        return new Response("Invalid Body");
+        return new Response("Invalid Body", { status: 400 });
       }
     }
-    await fetch("https://gemini.getbeamer.com/async/event", {
-      method: request.method,
-      headers: {
-        ...request.headers,
-        "X-Testing-Message": "I'm Syed from Beamer, and I am testing"
-      },
-      body: json
-    });
+    try {
+      await fetch("https://gemini.getbeamer.com/async/event", {
+        method: request.method,
+        headers: {
+          ...request.headers,
+          "X-Testing-Message": "I'm Syed from Beamer, and I am testing"
+        },
+        body: json
+      });
+    } catch (e) {
+      console.log("Gemini Request Failed: " + error.message);
+      return new Response("Unable to Register Event", {
+        status: 500
+      });
+    }
     return new Response(JSON.stringify(json), {
       status: 200,
       headers: { "Content-Type": "application/json" }
     });
-  } catch (error) {
-    console.log(error.message);
-    return new Response("Error: " + error.message, {
+  } catch (error2) {
+    console.log(error2.message);
+    return new Response("Error: " + error2.message, {
       status: 500
     });
   }
@@ -1769,12 +1781,12 @@ var pages_template_worker_default = {
     };
     try {
       return await next();
-    } catch (error) {
+    } catch (error2) {
       if (isFailOpen) {
         const response = await env["ASSETS"].fetch(request);
         return cloneResponse(response);
       }
-      throw error;
+      throw error2;
     }
   }
 };
@@ -1813,8 +1825,8 @@ var jsonError = async (request, env, _ctx, middlewareCtx) => {
   try {
     return await middlewareCtx.next(request, env);
   } catch (e) {
-    const error = reduceError(e);
-    return Response.json(error, {
+    const error2 = reduceError(e);
+    return Response.json(error2, {
       status: 500,
       headers: { "MF-Experimental-Error-Stack": "true" }
     });
@@ -1969,8 +1981,8 @@ var jsonError2 = async (request, env, _ctx, middlewareCtx) => {
   try {
     return await middlewareCtx.next(request, env);
   } catch (e) {
-    const error = reduceError2(e);
-    return Response.json(error, {
+    const error2 = reduceError2(e);
+    return Response.json(error2, {
       status: 500,
       headers: { "MF-Experimental-Error-Stack": "true" }
     });
